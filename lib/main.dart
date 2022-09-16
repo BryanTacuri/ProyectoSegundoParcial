@@ -1,6 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() {
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+void main() async {
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -29,6 +35,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isUserLogged = false;
+
+  @override
+  void initState() {
+    FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+      setState(() {
+        isUserLogged = user != null;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
