@@ -1,3 +1,4 @@
+import 'package:app_pizzeria/app/point/points.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -31,6 +32,8 @@ class ScreensBuilder extends StatelessWidget {
                 ),
               ),
             );
+          case 1:
+            return PointPage();
           default:
             return Text(
               pageTitle,
