@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         'checkout': ((context) => const CheckOutPage()),
         'login': ((context) => const AuthPage()),
-        'home': ((context) => const HomePage())
+        'home': ((context) => const HomePage()),
       },
     );
   }
