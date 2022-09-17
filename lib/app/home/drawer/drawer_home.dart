@@ -1,12 +1,12 @@
+import 'package:app_pizzeria/app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class DrawerHome extends StatelessWidget {
   final SidebarXController controller;
-  const DrawerHome({
-    super.key,
-    required this.controller,
-  });
+  final GlobalKey<ScaffoldState> controllerScaffold;
+  const DrawerHome(
+      {super.key, required this.controller, required this.controllerScaffold});
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +51,9 @@ class DrawerHome extends StatelessWidget {
           size: 20,
         ),
       ),
-      extendedTheme: const SidebarXTheme(
-        width: 200,
-        decoration: BoxDecoration(
+      extendedTheme: SidebarXTheme(
+        width: Utils.getSize(context).width * 0.5,
+        decoration: const BoxDecoration(
           color: Color.fromARGB(255, 22, 16, 127),
         ),
       ),
@@ -67,16 +67,15 @@ class DrawerHome extends StatelessWidget {
           ),
         );
       },
-      items: const [
+      items: [
+        SidebarXItem(icon: Icons.home, label: 'Mis Productos', onTap: _onClose),
         SidebarXItem(
-          icon: Icons.home,
-          label: 'Mis Productos',
-        ),
-        SidebarXItem(
-          icon: Icons.business,
-          label: 'Puntos de Venta',
-        )
+            icon: Icons.business, label: 'Puntos de Venta', onTap: _onClose)
       ],
     );
+  }
+
+  _onClose() {
+    controllerScaffold.currentState?.closeDrawer();
   }
 }

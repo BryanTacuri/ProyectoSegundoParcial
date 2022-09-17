@@ -12,13 +12,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
+  final _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _key,
         appBar: AppBar(
           title: const Text('Pizzeria Mellizos'),
         ),
-        drawer: DrawerHome(controller: _controller),
+        drawer: DrawerHome(controller: _controller, controllerScaffold: _key),
         body: ScreensBuilder(
           controller: _controller,
         ));
