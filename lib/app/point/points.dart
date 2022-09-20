@@ -29,9 +29,7 @@ class _PointPageState extends State<PointPage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              PointDomain pointDomain = PointDomain();
-              pointDomain.storePoint(
-                  name: 'mi primer', owner: 'danielñ', lat: -0.2, lng: -79);
+              Navigator.pushNamed(context, 'create_point');
             },
             child: const Icon(Icons.add),
           ),
