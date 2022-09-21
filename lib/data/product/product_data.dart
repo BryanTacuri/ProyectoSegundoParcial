@@ -37,6 +37,9 @@ class ProductData {
         'uid': uid,
         'uid_image': currentUidImage
       });
+      status = true;
+      title = 'Hecho';
+      message = 'Producto guardado correctamente';
     } catch (e) {
       status = false;
       title = 'Error';

@@ -41,11 +41,13 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     Navigator.pop(context);
   }
 
-  storePoint() async {
+  updateProduct() async {
     setState(() {
       savingImage = true;
     });
-    final response = await _productData.storeProduct(
+    final response = await _productData.updateProduct(
+        uid: uid,
+        uidImage: uidImage,
         urlImage: urlImage,
         priceProduct: priceProduct,
         nameProduct: nameProduct,
@@ -121,7 +123,17 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                                               'assets/product.png'),
                                           image: NetworkImage(urlImage)),
                                     )
-                                  : Image(image: FileImage(File(urlImage))),
+                                  : Image(
+                                      height:
+                                          Utils.getSize(context).height * 0.2,
+                                      width:
+                                          Utils.getSize(context).height * 0.2,
+                                      image: FileImage(
+                                        File(
+                                          urlImage,
+                                        ),
+                                      ),
+                                      fit: BoxFit.contain),
                               Positioned(
                                   bottom: 10,
                                   right: 10,
@@ -176,7 +188,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                               : () {
                                   if (myForm.currentState?.validate() ??
                                       false) {
-                                    storePoint();
+                                    updateProduct();
                                   } else {
                                     Utils.showScaffoldNotification(
                                         context: context,
