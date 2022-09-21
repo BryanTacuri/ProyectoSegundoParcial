@@ -19,6 +19,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   String descriptionProduct = '';
   double priceProduct = 0;
   String uid = '';
+  String uidImage = '';
   final ImagePicker _imagePicker = ImagePicker();
   final ProductDomain _productData = ProductDomain();
   bool savingImage = false;
@@ -70,6 +71,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     priceProduct = args.priceProduct;
     urlImage = args.urlImage;
     uid = args.uid;
+    uidImage = args.uidImage;
     super.didChangeDependencies();
   }
 

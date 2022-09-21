@@ -48,6 +48,7 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                     onTap: () {
                       Navigator.pushNamed(context, 'update_product',
                           arguments: ProductArgument(
+                              uidImage: data['uidImage'] ?? '',
                               uid: data['uid'] ?? '',
                               descriptionProduct: data['descriptionProduct'] ??
                                   'Bebida azucarada.',
