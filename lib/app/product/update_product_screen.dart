@@ -18,6 +18,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   String nameProduct = '';
   String descriptionProduct = '';
   double priceProduct = 0;
+  String uid = '';
   final ImagePicker _imagePicker = ImagePicker();
   final ProductDomain _productData = ProductDomain();
   bool savingImage = false;
@@ -68,6 +69,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     nameProduct = args.nameProduct;
     priceProduct = args.priceProduct;
     urlImage = args.urlImage;
+    uid = args.uid;
     super.didChangeDependencies();
   }
 
@@ -83,7 +85,17 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'UID: $uid',
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       SizedBox(
                           height: Utils.getSize(context).height * 0.2,
                           width: Utils.getSize(context).height * 0.2,
@@ -174,7 +186,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                                 },
                           child: savingImage
                               ? const CircularProgressIndicator()
-                              : const Text('Guardar'),
+                              : const Text('Editar'),
                         ),
                       )
                     ],

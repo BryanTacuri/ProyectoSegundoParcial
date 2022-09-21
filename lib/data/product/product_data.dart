@@ -7,6 +7,7 @@ class ProductData {
   final _storageRef = FirebaseStorage.instance.ref();
   final CollectionReference _products =
       FirebaseFirestore.instance.collection('products');
+
   Future<Map<String, dynamic>> storeProduct(
       {required String urlImage,
       required double priceProduct,
@@ -25,12 +26,15 @@ class ProductData {
             .putFile(file);
         currentUrlImage = await response.ref.getDownloadURL();
       }
-      _products.add({
+      String reference = DateTime.now().microsecondsSinceEpoch.toString();
+      _products.doc(reference).set({
         'nameProduct': nameProduct,
         'urlImage': currentUrlImage,
         'descriptionProduct': descriptionProduct,
-        'priceProduct': priceProduct
+        'priceProduct': priceProduct,
+        'uid': reference
       });
+      // _products.add({});
       status = true;
       title = 'Hecho';
       message = 'Producto guardado correctamente';
