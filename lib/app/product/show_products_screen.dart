@@ -3,16 +3,16 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class PointPage extends StatefulWidget {
-  const PointPage({super.key});
+class ShowProductsScreen extends StatefulWidget {
+  const ShowProductsScreen({super.key});
 
   @override
-  State<PointPage> createState() => _PointPageState();
+  State<ShowProductsScreen> createState() => _ShowProductsScreenState();
 }
 
-class _PointPageState extends State<PointPage> {
+class _ShowProductsScreenState extends State<ShowProductsScreen> {
   final Stream<QuerySnapshot> _pointStream = FirebaseFirestore.instance
-      .collection('points')
+      .collection('products')
       .snapshots(includeMetadataChanges: true);
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,8 @@ class _PointPageState extends State<PointPage> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           inspect(snapshot);
-          return const Text('Error al Obtener los pdv.');
+
+          return const Text('Error al Obtener los productos.');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -31,7 +32,7 @@ class _PointPageState extends State<PointPage> {
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, 'create_point');
+              Navigator.pushNamed(context, 'create_product');
             },
             child: const Icon(Icons.add),
           ),
@@ -40,8 +41,14 @@ class _PointPageState extends State<PointPage> {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
               return ListTile(
-                title: Text(data['name']),
-                subtitle: Text(data['owner']),
+                title: Text(data['nameProduct'] ?? 'Coca-Cola'),
+                subtitle:
+                    Text(data['descriptionProduct'] ?? 'Bebida azucarada.'),
+                leading: Image(image: NetworkImage(data['url'])),
+                trailing: Text(
+                  data['priceProduct'] ?? '3',
+                  style: const TextStyle(color: Colors.green),
+                ),
               );
             }).toList(),
           ),
