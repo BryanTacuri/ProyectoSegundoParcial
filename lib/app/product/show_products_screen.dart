@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:app_pizzeria/app/product/arguments/product_argument.dart';
+import 'package:app_pizzeria/domain/product/product_domain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -44,27 +45,62 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                   document.data()! as Map<String, dynamic>;
               return Column(
                 children: [
-                  ListTile(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'update_product',
-                          arguments: ProductArgument(
-                              uidImage: data['uidImage'] ?? '',
-                              uid: data['uid'] ?? '',
-                              descriptionProduct: data['descriptionProduct'] ??
-                                  'Bebida azucarada.',
-                              nameProduct: data['nameProduct'] ?? 'Coca-Cola',
-                              priceProduct: data['priceProduct'] ?? 0,
-                              urlImage: data['urlImage']));
+                  Dismissible(
+                    key: UniqueKey(),
+                    confirmDismiss: (direction) async {
+                      return await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Eliminar Producto"),
+                            content: Text(
+                                "Estás seguro(a) de eliminar el producto: ${data['nameProduct'] ?? 'Coca-Cola'}"),
+                            actions: <Widget>[
+                              ElevatedButton(
+                                  onPressed: () {
+                                    ProductDomain productDomain =
+                                        ProductDomain();
+                                    final value = productDomain
+                                        .deleteProduct(
+                                            uid: data['uid'],
+                                            uidImage: data['uidImage'])
+                                        .then((value) => value.status);
+                                    return Navigator.of(context).pop(true);
+                                  },
+                                  child: const Text("Eliminar")),
+                              ElevatedButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                                child: const Text("Cancelar"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
-                    title: Text(data['nameProduct'] ?? 'Coca-Cola'),
-                    subtitle:
-                        Text(data['descriptionProduct'] ?? 'Bebida azucarada.'),
-                    leading: Image(
-                        image: NetworkImage(data['urlImage'] ??
-                            'https://img.freepik.com/foto-gratis/amor-romance-perforado-corazon-papel_53876-87.jpg')),
-                    trailing: Text(
-                      ' ${data['priceProduct'] ?? 0}',
-                      style: const TextStyle(color: Colors.green),
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'update_product',
+                            arguments: ProductArgument(
+                                uidImage: data['uidImage'] ?? '',
+                                uid: data['uid'] ?? '',
+                                descriptionProduct:
+                                    data['descriptionProduct'] ??
+                                        'Bebida azucarada.',
+                                nameProduct: data['nameProduct'] ?? 'Coca-Cola',
+                                priceProduct: data['priceProduct'] ?? 0,
+                                urlImage: data['urlImage']));
+                      },
+                      title: Text(data['nameProduct'] ?? 'Coca-Cola'),
+                      subtitle: Text(
+                          data['descriptionProduct'] ?? 'Bebida azucarada.'),
+                      leading: Image(
+                          image: NetworkImage(data['urlImage'] ??
+                              'https://img.freepik.com/foto-gratis/amor-romance-perforado-corazon-papel_53876-87.jpg')),
+                      trailing: Text(
+                        ' ${data['priceProduct'] ?? 0}',
+                        style: const TextStyle(color: Colors.green),
+                      ),
                     ),
                   ),
                   const Divider()

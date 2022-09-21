@@ -8,6 +8,26 @@ class ProductData {
   final CollectionReference _products =
       FirebaseFirestore.instance.collection('products');
 
+  Future<Map<String, dynamic>> deleteProduct(
+      {required String uidImage, required String uid}) async {
+    bool status = false;
+    String title = '';
+    String message = '';
+    try {
+      await _storageRef.child(uidImage).delete();
+      await _products.doc(uid).delete();
+
+      status = true;
+      title = 'Hecho';
+      message = 'Producto eliminado correctamente';
+    } catch (e) {
+      status = false;
+      title = 'Error';
+      message = 'No se logró eliminar el producto.';
+    }
+    return {'status': status, 'title': title, 'message': message};
+  }
+
   Future<Map<String, dynamic>> updateProduct(
       {required String urlImage,
       required String uid,
