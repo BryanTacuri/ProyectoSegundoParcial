@@ -41,6 +41,7 @@ dependencies:
   sidebarx: ^0.12.0
   cloud_firestore: ^3.4.8
   image_picker: ^0.8.5+3
+  firebase_storage: ^10.3.8
 
 dev_dependencies:
   flutter_test:

@@ -44,9 +44,11 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                 title: Text(data['nameProduct'] ?? 'Coca-Cola'),
                 subtitle:
                     Text(data['descriptionProduct'] ?? 'Bebida azucarada.'),
-                leading: Image(image: NetworkImage(data['url'])),
+                leading: Image(
+                    image: NetworkImage(data['urlImage'] ??
+                        'https://img.freepik.com/foto-gratis/amor-romance-perforado-corazon-papel_53876-87.jpg')),
                 trailing: Text(
-                  data['priceProduct'] ?? '3',
+                  ' ${data['priceProduct'] ?? 0}',
                   style: const TextStyle(color: Colors.green),
                 ),
               );

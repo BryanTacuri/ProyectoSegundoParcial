@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_pizzeria/app/utils.dart';
+import 'package:app_pizzeria/domain/product/product_domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,8 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
   String descriptionProduct = '';
   double priceProduct = 0;
   final ImagePicker _imagePicker = ImagePicker();
+  final ProductDomain _productData = ProductDomain();
+  bool savingImage = false;
 
   String urlImage = '';
   GlobalKey<FormState> myForm = GlobalKey();
@@ -29,6 +32,32 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
         urlImage = currentImage.path;
       });
     }
+  }
+
+  gotoBack() {
+    Navigator.pop(context);
+  }
+
+  storePoint() async {
+    setState(() {
+      savingImage = true;
+    });
+    final response = await _productData.storeProduct(
+        urlImage: urlImage,
+        priceProduct: priceProduct,
+        nameProduct: nameProduct,
+        descriptionProduct: descriptionProduct);
+    setState(() {
+      savingImage = false;
+    });
+    if (response.status) {
+      gotoBack();
+    }
+    Utils.showScaffoldNotification(
+        context: context,
+        message: response.message,
+        title: response.title,
+        type: response.status ? 'success' : 'error');
   }
 
   @override
@@ -115,18 +144,24 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (myForm.currentState?.validate() ?? false) {
-                            } else {
-                              Utils.showScaffoldNotification(
-                                  context: context,
-                                  message:
-                                      'Ingrese los campos correspondientes.',
-                                  title: 'Atención',
-                                  type: 'error');
-                            }
-                          },
-                          child: const Text('Guardar'),
+                          onPressed: savingImage
+                              ? null
+                              : () {
+                                  if (myForm.currentState?.validate() ??
+                                      false) {
+                                    storePoint();
+                                  } else {
+                                    Utils.showScaffoldNotification(
+                                        context: context,
+                                        message:
+                                            'Ingrese los campos correspondientes.',
+                                        title: 'Atención',
+                                        type: 'error');
+                                  }
+                                },
+                          child: savingImage
+                              ? const CircularProgressIndicator()
+                              : const Text('Guardar'),
                         ),
                       )
                     ],
