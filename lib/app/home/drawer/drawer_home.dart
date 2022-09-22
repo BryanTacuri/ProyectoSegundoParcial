@@ -72,6 +72,7 @@ class DrawerHome extends StatelessWidget {
         SidebarXItem(icon: Icons.home, label: 'Mis Productos', onTap: _onClose),
         SidebarXItem(
             icon: Icons.business, label: 'Puntos de Venta', onTap: _onClose),
+        SidebarXItem(icon: Icons.business, label: 'Ver Mapa', onTap: _onClose),
         SidebarXItem(
             icon: Icons.account_box_rounded,
             label: 'Cerrar Sesión',

@@ -1,3 +1,4 @@
+import 'package:app_pizzeria/app/point/all_points_map.dart';
 import 'package:app_pizzeria/app/point/points.dart';
 import 'package:app_pizzeria/app/product/show_products_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class ScreensBuilder extends StatelessWidget {
             return const ShowProductsScreen();
           case 1:
             return const PointPage();
+          case 2:
+            return const AllPointsMapScreen();
           default:
             return Text(
               pageTitle,

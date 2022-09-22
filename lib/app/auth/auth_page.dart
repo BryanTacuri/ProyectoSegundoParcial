@@ -1,5 +1,5 @@
 import 'package:app_pizzeria/app/utils.dart';
-import 'package:app_pizzeria/domain/auth/login.dart';
+import 'package:app_pizzeria/domain/auth/session.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {

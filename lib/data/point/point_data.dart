@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_pizzeria/models/point_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -8,7 +10,30 @@ class PointData {
       FirebaseFirestore.instance.collection('points');
   final _storageRef = FirebaseStorage.instance.ref();
 
-  //
+  Future<Map<String, dynamic>> getAllPoints() async {
+    List<PointModel> points = [];
+    bool status = false;
+    String message = '';
+    String title = '';
+    try {
+      await _points.get().then((QuerySnapshot value) => {
+            value.docs.forEach((element) {
+              points.add(PointModel.fromFirebase(pointJson: element));
+            })
+          });
+    } catch (e) {
+      status = false;
+      title = 'Oopss';
+      message = 'Ha Ourrido un error';
+    }
+    return {
+      'status': status,
+      'title': title,
+      'message': message,
+      'data': points
+    };
+  }
+
   Future<Map<String, dynamic>> updatePoint(
       {required String name,
       required String owner,

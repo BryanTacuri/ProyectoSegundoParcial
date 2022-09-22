@@ -54,6 +54,22 @@ class PointDomain {
     return DomainResponse(status: status, title: title, message: message);
   }
 
+  Future<DomainResponse> getAllPoints() async {
+    bool status = false;
+    String title = '';
+    String message = '';
+    dynamic data;
+    final response = await _pointData.getAllPoints();
+    status = response['status'] ?? false;
+    title = response['title'] ?? 'Error';
+    data = response['data'] ?? [];
+    message =
+        response['message'] ?? 'No se logró obtener información del error';
+
+    return DomainResponse(
+        status: status, message: message, title: title, data: data);
+  }
+
   Future<DomainResponse> storePoint(
       {required String name,
       required String owner,
