@@ -7,6 +7,8 @@ class PointDomain {
   //
   Future<DomainResponse> updatePoint(
       {required String name,
+      required String uidImage,
+      required String urlImage,
       required String owner,
       required String uid,
       required double? lat,
@@ -15,7 +17,13 @@ class PointDomain {
     String title = '';
     String message = '';
     final response = await _pointData.updatePoint(
-        lat: lat, lng: lng, name: name, owner: owner, uid: uid);
+        uidImage: uidImage,
+        urlImage: urlImage,
+        lat: lat,
+        lng: lng,
+        name: name,
+        owner: owner,
+        uid: uid);
     status = response['status'] ?? false;
     title = response['title'] ?? '';
     message = response['message'] ?? '';

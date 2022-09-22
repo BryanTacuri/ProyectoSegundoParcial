@@ -12,15 +12,33 @@ class PointData {
   Future<Map<String, dynamic>> updatePoint(
       {required String name,
       required String owner,
+      required String urlImage,
+      required String uidImage,
       required String uid,
       required double? lat,
       required double? lng}) async {
     bool status = false;
     String title = '';
     String message = '';
+    String currentUidImage = uidImage;
+    String currentUrlImage = urlImage;
     try {
-      await _points.doc(uid).set(
-          {'name': name, 'owner': owner, 'lat': lat, 'lng': lng, 'uid': uid});
+      if (!urlImage.startsWith('http')) {
+        await _storageRef.child(uidImage).delete();
+        File file = File(urlImage);
+        currentUidImage = DateTime.now().microsecondsSinceEpoch.toString();
+        final response = await _storageRef.child(currentUidImage).putFile(file);
+        currentUrlImage = await response.ref.getDownloadURL();
+      }
+      await _points.doc(uid).set({
+        'name': name,
+        'owner': owner,
+        'lat': lat,
+        'lng': lng,
+        'uid': uid,
+        'uidImage': currentUidImage,
+        'urlImage': currentUrlImage,
+      });
       status = true;
       title = 'Pdv Actualizado';
       message = 'Se ha aztualizado con exito el Pdv: $name';

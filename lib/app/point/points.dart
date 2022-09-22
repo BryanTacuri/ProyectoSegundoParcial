@@ -46,6 +46,8 @@ class _PointPageState extends State<PointPage> {
                     onTap: () {
                       Navigator.pushNamed(context, 'update_point',
                           arguments: PointsArgument(
+                              uidImage: data['uidImage'],
+                              urlImage: data['urlImage'],
                               name: data['name'] ?? 'Joyas',
                               uid: data['uid'] ?? '',
                               owner: data['owner'] ?? 'Bryan Tacuri',

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:app_pizzeria/app/point/arguments/points_arguments.dart';
 import 'package:app_pizzeria/app/utils.dart';
@@ -8,6 +9,7 @@ import 'package:app_pizzeria/domain/point/point_domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UpdatePointScreen extends StatefulWidget {
   const UpdatePointScreen({super.key});
@@ -21,16 +23,29 @@ class _UpdatePointScreenState extends State<UpdatePointScreen> {
   String nameOwner = '';
   double? lat;
   double? lng;
+  String uidImage = '';
   bool putMyUbication = true;
   String uid = '';
   bool gettinMyUbication = false;
   Set<Marker> markers = {};
   GlobalKey<FormState> myForm = GlobalKey();
+  final ImagePicker _imagePicker = ImagePicker();
 
   final Completer<GoogleMapController> _controller = Completer();
   late CameraPosition _kLake;
   final _deviceGps = GpsDevice();
   bool isSaving = false;
+  String urlImage = '';
+
+  getImage() async {
+    XFile? currentImage =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (currentImage != null) {
+      setState(() {
+        urlImage = currentImage.path;
+      });
+    }
+  }
 
   getMyUbication() async {
     setState(() {
@@ -80,7 +95,13 @@ class _UpdatePointScreenState extends State<UpdatePointScreen> {
     PointDomain pointDomain = PointDomain();
     try {
       final response = await pointDomain.updatePoint(
-          name: namePoint, owner: nameOwner, lat: lat, lng: lng, uid: uid);
+          name: namePoint,
+          owner: nameOwner,
+          lat: lat,
+          lng: lng,
+          uid: uid,
+          uidImage: uidImage,
+          urlImage: urlImage);
       setState(() {
         isSaving = false;
       });
@@ -114,7 +135,8 @@ class _UpdatePointScreenState extends State<UpdatePointScreen> {
       lat = args.lat;
       lng = args.lng;
       uid = args.uid;
-
+      urlImage = args.urlImage;
+      uidImage = args.uidImage;
       putMyUbication = false;
       if (lat != null && lng != null) {
         markers = {
@@ -157,6 +179,51 @@ class _UpdatePointScreenState extends State<UpdatePointScreen> {
                           height: 10,
                         ),
                         Text('Uid: $uid'),
+                        SizedBox(
+                            height: Utils.getSize(context).height * 0.2,
+                            width: Utils.getSize(context).height * 0.2,
+                            child: Stack(
+                              children: [
+                                urlImage.startsWith('http')
+                                    ? SizedBox(
+                                        height:
+                                            Utils.getSize(context).height * 0.2,
+                                        width:
+                                            Utils.getSize(context).height * 0.2,
+                                        child: FadeInImage(
+                                            fit: BoxFit.cover,
+                                            placeholderErrorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Image(
+                                                  image: AssetImage(
+                                                      'assets/error.jpg'));
+                                            },
+                                            placeholder: const AssetImage(
+                                                'assets/product.png'),
+                                            image: NetworkImage(urlImage)),
+                                      )
+                                    : Image(
+                                        height:
+                                            Utils.getSize(context).height * 0.2,
+                                        width:
+                                            Utils.getSize(context).height * 0.2,
+                                        image: FileImage(
+                                          File(
+                                            urlImage,
+                                          ),
+                                        ),
+                                        fit: BoxFit.contain),
+                                Positioned(
+                                    bottom: 10,
+                                    right: 10,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.add_a_photo),
+                                      onPressed: () {
+                                        getImage();
+                                      },
+                                    ))
+                              ],
+                            )),
                         TextFormField(
                           initialValue: namePoint,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
