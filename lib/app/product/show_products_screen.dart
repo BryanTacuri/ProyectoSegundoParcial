@@ -40,18 +40,19 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
             },
             child: const Icon(Icons.add),
           ),
-          body: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data()! as Map<String, dynamic>;
-              return data.isEmpty
-                  ? const EmptyMessageWidget()
-                  : Column(
+          body: snapshot.data!.docs.isEmpty
+              ? const Center(child: EmptyMessageWidget())
+              : ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+                    return Column(
                       children: [
                         Dismissible(
                           key: UniqueKey(),
-                          background: BackgroundDissmisable(),
+                          background: const BackgroundDissmisable(),
                           confirmDismiss: (direction) async {
                             return await showDialog(
                               context: context,
@@ -113,8 +114,8 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                         const Divider()
                       ],
                     );
-            }).toList(),
-          ),
+                  }).toList(),
+                ),
         );
       },
     );

@@ -10,6 +10,7 @@ class EmptyMessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
             height: Utils.getSize(context).height * 0.2,

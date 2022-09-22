@@ -39,13 +39,14 @@ class _PointPageState extends State<PointPage> {
             },
             child: const Icon(Icons.add),
           ),
-          body: ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data()! as Map<String, dynamic>;
-              return data.isEmpty
-                  ? const EmptyMessageWidget()
-                  : Column(
+          body: snapshot.data!.docs.isEmpty
+              ? const Center(child: EmptyMessageWidget())
+              : ListView(
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+                    return Column(
                       children: [
                         Dismissible(
                           key: UniqueKey(),
@@ -56,7 +57,7 @@ class _PointPageState extends State<PointPage> {
                                 return AlertDialog(
                                   title: const Text("Eliminar Producto"),
                                   content: Text(
-                                      "Estás seguro(a) de eliminar el producto: ${data['nameProduct'] ?? 'Coca-Cola'}"),
+                                      "Estás seguro(a) de eliminar el Punto de venta: ${data['name'] ?? 'Coca-Cola'}"),
                                   actions: <Widget>[
                                     ElevatedButton(
                                         onPressed: () {
@@ -104,8 +105,8 @@ class _PointPageState extends State<PointPage> {
                         const Divider()
                       ],
                     );
-            }).toList(),
-          ),
+                  }).toList(),
+                ),
         );
       },
     );
