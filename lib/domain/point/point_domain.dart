@@ -25,13 +25,14 @@ class PointDomain {
   Future<DomainResponse> storePoint(
       {required String name,
       required String owner,
+      required String urlImage,
       required double? lat,
       required double? lng}) async {
     bool status = false;
     String title = '';
     String message = '';
-    final response =
-        await _pointData.addPoint(lat: lat, lng: lng, name: name, owner: owner);
+    final response = await _pointData.addPoint(
+        lat: lat, lng: lng, name: name, owner: owner, urlImage: urlImage);
     status = response['status'] ?? false;
     title = response['title'] ?? '';
     message = response['message'] ?? '';

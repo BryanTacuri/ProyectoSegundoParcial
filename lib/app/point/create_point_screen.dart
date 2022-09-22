@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app_pizzeria/app/utils.dart';
 import 'package:app_pizzeria/device/gps_device.dart';
 import 'package:app_pizzeria/domain/point/point_domain.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePointScreen extends StatefulWidget {
   const CreatePointScreen({super.key});
@@ -18,11 +20,12 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
   String nameOwner = '';
   double? lat;
   double? lng;
+  String urlImage = '';
   bool putMyUbication = true;
   bool gettinMyUbication = false;
   Set<Marker> markers = {};
   GlobalKey<FormState> myForm = GlobalKey();
-
+  final ImagePicker _imagePicker = ImagePicker();
   final Completer<GoogleMapController> _controller = Completer();
   late CameraPosition _kLake;
   final _deviceGps = GpsDevice();
@@ -69,6 +72,16 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
     Navigator.pop(context);
   }
 
+  getImage() async {
+    XFile? currentImage =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (currentImage != null) {
+      setState(() {
+        urlImage = currentImage.path;
+      });
+    }
+  }
+
   savePoint() async {
     setState(() {
       isSaving = true;
@@ -76,7 +89,11 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
     PointDomain pointDomain = PointDomain();
     try {
       final response = await pointDomain.storePoint(
-          name: namePoint, owner: nameOwner, lat: lat, lng: lng);
+          urlImage: urlImage,
+          name: namePoint,
+          owner: nameOwner,
+          lat: lat,
+          lng: lng);
       setState(() {
         isSaving = false;
       });
@@ -116,11 +133,45 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
         child: Form(
           key: myForm,
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Column(
                 children: [
+                  SizedBox(
+                      height: Utils.getSize(context).height * 0.2,
+                      width: Utils.getSize(context).height * 0.2,
+                      child: Stack(
+                        children: [
+                          urlImage.isNotEmpty
+                              ? SizedBox(
+                                  height: Utils.getSize(context).height * 0.2,
+                                  width: Utils.getSize(context).height * 0.2,
+                                  child: FadeInImage(
+                                      fit: BoxFit.cover,
+                                      placeholderErrorBuilder:
+                                          (context, error, stackTrace) {
+                                        return const Image(
+                                            image:
+                                                AssetImage('assets/error.jpg'));
+                                      },
+                                      placeholder: const AssetImage(
+                                          'assets/product.png'),
+                                      image: FileImage(File(urlImage))),
+                                )
+                              : const Image(
+                                  image: AssetImage('assets/product.png')),
+                          Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: IconButton(
+                                icon: const Icon(Icons.add_a_photo),
+                                onPressed: () {
+                                  getImage();
+                                },
+                              ))
+                        ],
+                      )),
                   TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(labelText: 'Nombre'),

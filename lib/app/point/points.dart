@@ -52,6 +52,9 @@ class _PointPageState extends State<PointPage> {
                               lat: data['lat'] ?? 0,
                               lng: data['lng'] ?? 0));
                     },
+                    leading: Image(
+                      image: NetworkImage(data['urlImage']),
+                    ),
                     title: Text(data['name'] ?? 'Joyas'),
                     subtitle: Text(data['owner'] ?? 'Bryan Tacuri'),
                   ),
