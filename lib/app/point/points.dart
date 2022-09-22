@@ -1,4 +1,5 @@
 import 'package:app_pizzeria/app/point/arguments/points_arguments.dart';
+import 'package:app_pizzeria/app/utils.dart';
 import 'package:app_pizzeria/app/widgets/background_dissmisable.dart';
 import 'package:app_pizzeria/app/widgets/empty_message.dart';
 import 'package:app_pizzeria/domain/point/point_domain.dart';
@@ -93,6 +94,7 @@ class _PointPageState extends State<PointPage> {
                                       lng: data['lng'] ?? 0));
                             },
                             leading: Image(
+                              width: Utils.getSize(context).width * 0.1,
                               image: NetworkImage(data['urlImage']),
                             ),
                             title: Text(data['name'] ?? 'Joyas'),

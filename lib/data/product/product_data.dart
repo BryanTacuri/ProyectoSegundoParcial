@@ -77,9 +77,11 @@ class ProductData {
     bool status = false;
     String title = '';
     String message = '';
-    String uidImage = DateTime.now().microsecondsSinceEpoch.toString();
+    String uidImage = urlImage.isEmpty
+        ? 'product.png'
+        : DateTime.now().microsecondsSinceEpoch.toString();
     String currentUrlImage =
-        'https://firebasestorage.googleapis.com/v0/b/pizzamellisos.appspot.com/o/images%2Fef33fa42-d6af-478b-abb8-6c076d66c026?alt=media&token=761bdb7a-2bdf-4c9c-8e99-2f14ad95ad74';
+        'https://firebasestorage.googleapis.com/v0/b/pizzamellisos.appspot.com/o/product.png?alt=media&token=bf43342d-e6bf-4130-ab10-694e92568b8d';
     try {
       if (urlImage.isNotEmpty) {
         File file = File(urlImage);

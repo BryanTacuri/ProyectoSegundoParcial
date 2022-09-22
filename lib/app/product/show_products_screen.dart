@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:app_pizzeria/app/product/arguments/product_argument.dart';
+import 'package:app_pizzeria/app/utils.dart';
 import 'package:app_pizzeria/app/widgets/background_dissmisable.dart';
 import 'package:app_pizzeria/app/widgets/empty_message.dart';
 import 'package:app_pizzeria/domain/product/product_domain.dart';
@@ -103,6 +104,7 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                             subtitle: Text(data['descriptionProduct'] ??
                                 'Bebida azucarada.'),
                             leading: Image(
+                                width: Utils.getSize(context).width * 0.1,
                                 image: NetworkImage(data['urlImage'] ??
                                     'https://img.freepik.com/foto-gratis/amor-romance-perforado-corazon-papel_53876-87.jpg')),
                             trailing: Text(

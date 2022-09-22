@@ -48,12 +48,19 @@ class PointData {
     String currentUidImage = uidImage;
     String currentUrlImage = urlImage;
     try {
-      if (!urlImage.startsWith('http')) {
-        await _storageRef.child(uidImage).delete();
-        File file = File(urlImage);
-        currentUidImage = DateTime.now().microsecondsSinceEpoch.toString();
-        final response = await _storageRef.child(currentUidImage).putFile(file);
-        currentUrlImage = await response.ref.getDownloadURL();
+      if (urlImage.isNotEmpty) {
+        if (!currentUrlImage.startsWith('http')) {
+          await _storageRef.child(uidImage).delete();
+          File file = File(urlImage);
+          currentUidImage = DateTime.now().microsecondsSinceEpoch.toString();
+          final response =
+              await _storageRef.child(currentUidImage).putFile(file);
+          currentUrlImage = await response.ref.getDownloadURL();
+        }
+      } else {
+        currentUrlImage =
+            'https://firebasestorage.googleapis.com/v0/b/pizzamellisos.appspot.com/o/logo.png?alt=media&token=2576b93c-becd-407c-b1da-b49eb26fbe7f';
+        currentUidImage = 'logo.png';
       }
       await _points.doc(uid).set({
         'name': name,
@@ -114,6 +121,10 @@ class PointData {
         File file = File(urlImage);
         final response = await _storageRef.child(uidImage).putFile(file);
         currentUrlImage = await response.ref.getDownloadURL();
+      } else {
+        currentUrlImage =
+            'https://firebasestorage.googleapis.com/v0/b/pizzamellisos.appspot.com/o/logo.png?alt=media&token=2576b93c-becd-407c-b1da-b49eb26fbe7f';
+        uidImage = 'logo.png';
       }
 
       await _points.doc(uidPoint).set({
