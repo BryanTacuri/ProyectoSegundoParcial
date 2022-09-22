@@ -69,102 +69,109 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
         body: SafeArea(
             child: Form(
                 key: myForm,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          height: Utils.getSize(context).height * 0.2,
-                          width: Utils.getSize(context).height * 0.2,
-                          child: Stack(
-                            children: [
-                              urlImage.isNotEmpty
-                                  ? SizedBox(
-                                      height:
-                                          Utils.getSize(context).height * 0.2,
-                                      width:
-                                          Utils.getSize(context).height * 0.2,
-                                      child: FadeInImage(
-                                          fit: BoxFit.cover,
-                                          placeholderErrorBuilder:
-                                              (context, error, stackTrace) {
-                                            return const Image(
-                                                image: AssetImage(
-                                                    'assets/error.jpg'));
-                                          },
-                                          placeholder: const AssetImage(
-                                              'assets/product.png'),
-                                          image: FileImage(File(urlImage))),
-                                    )
-                                  : const Image(
-                                      image: AssetImage('assets/product.png')),
-                              Positioned(
-                                  bottom: 10,
-                                  right: 10,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.add_a_photo),
-                                    onPressed: () {
-                                      getImage();
-                                    },
-                                  ))
-                            ],
-                          )),
-                      TextFormField(
-                        validator: _validator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: const InputDecoration(labelText: 'Nombre'),
-                        onChanged: (value) {
-                          nameProduct = value;
-                        },
-                      ),
-                      TextFormField(
-                        validator: _validator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration:
-                            const InputDecoration(labelText: 'Descripción'),
-                        onChanged: (value) {
-                          descriptionProduct = value;
-                        },
-                      ),
-                      TextFormField(
-                        validator: _validator,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-                        ],
-                        decoration: const InputDecoration(labelText: 'Precio'),
-                        onChanged: (value) {
-                          priceProduct = double.tryParse(value) ?? 0;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: savingImage
-                              ? null
-                              : () {
-                                  if (myForm.currentState?.validate() ??
-                                      false) {
-                                    storePoint();
-                                  } else {
-                                    Utils.showScaffoldNotification(
-                                        context: context,
-                                        message:
-                                            'Ingrese los campos correspondientes.',
-                                        title: 'Atención',
-                                        type: 'error');
-                                  }
-                                },
-                          child: savingImage
-                              ? const CircularProgressIndicator()
-                              : const Text('Guardar'),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            height: Utils.getSize(context).height * 0.2,
+                            width: Utils.getSize(context).height * 0.2,
+                            child: Stack(
+                              children: [
+                                urlImage.isNotEmpty
+                                    ? SizedBox(
+                                        height:
+                                            Utils.getSize(context).height * 0.2,
+                                        width:
+                                            Utils.getSize(context).height * 0.2,
+                                        child: FadeInImage(
+                                            fit: BoxFit.cover,
+                                            placeholderErrorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Image(
+                                                  image: AssetImage(
+                                                      'assets/error.jpg'));
+                                            },
+                                            placeholder: const AssetImage(
+                                                'assets/product.png'),
+                                            image: FileImage(File(urlImage))),
+                                      )
+                                    : const Image(
+                                        image:
+                                            AssetImage('assets/product.png')),
+                                Positioned(
+                                    bottom: 10,
+                                    right: 10,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.add_a_photo),
+                                      onPressed: () {
+                                        getImage();
+                                      },
+                                    ))
+                              ],
+                            )),
+                        TextFormField(
+                          validator: _validator,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration:
+                              const InputDecoration(labelText: 'Nombre'),
+                          onChanged: (value) {
+                            nameProduct = value;
+                          },
                         ),
-                      )
-                    ],
+                        TextFormField(
+                          validator: _validator,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration:
+                              const InputDecoration(labelText: 'Descripción'),
+                          onChanged: (value) {
+                            descriptionProduct = value;
+                          },
+                        ),
+                        TextFormField(
+                          validator: _validator,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r"[0-9.]")),
+                          ],
+                          decoration:
+                              const InputDecoration(labelText: 'Precio'),
+                          onChanged: (value) {
+                            priceProduct = double.tryParse(value) ?? 0;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: savingImage
+                                ? null
+                                : () {
+                                    if (myForm.currentState?.validate() ??
+                                        false) {
+                                      storePoint();
+                                    } else {
+                                      Utils.showScaffoldNotification(
+                                          context: context,
+                                          message:
+                                              'Ingrese los campos correspondientes.',
+                                          title: 'Atención',
+                                          type: 'error');
+                                    }
+                                  },
+                            child: savingImage
+                                ? const CircularProgressIndicator()
+                                : const Text('Guardar'),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ))));
   }
