@@ -86,11 +86,11 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Crear Producto'),
+          title: const Text('Actualizar Producto'),
         ),
         body: SafeArea(
-            child: uidImage.isEmpty
-                ? const CircularProgressIndicator()
+            child: uid.isEmpty
+                ? const Center(child: CircularProgressIndicator())
                 : Form(
                     key: myForm,
                     child: SingleChildScrollView(

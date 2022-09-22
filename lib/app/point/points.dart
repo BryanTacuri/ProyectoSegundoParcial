@@ -21,12 +21,11 @@ class _PointPageState extends State<PointPage> {
       stream: _pointStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          inspect(snapshot);
           return const Text('Error al Obtener los pdv.');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         return Scaffold(

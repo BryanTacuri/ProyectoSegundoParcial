@@ -28,7 +28,7 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         return Scaffold(
@@ -82,7 +82,7 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                       onTap: () {
                         Navigator.pushNamed(context, 'update_product',
                             arguments: ProductArgument(
-                                uidImage: data['uidImage'] ?? '',
+                                uidImage: data['uid_Image'] ?? '',
                                 uid: data['uid'] ?? '',
                                 descriptionProduct:
                                     data['descriptionProduct'] ??
