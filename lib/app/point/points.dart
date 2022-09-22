@@ -39,9 +39,14 @@ class _PointPageState extends State<PointPage> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
-              return ListTile(
-                title: Text(data['name']),
-                subtitle: Text(data['owner']),
+              return Column(
+                children: [
+                  ListTile(
+                    title: Text(data['name']),
+                    subtitle: Text(data['owner']),
+                  ),
+                  const Divider()
+                ],
               );
             }).toList(),
           ),

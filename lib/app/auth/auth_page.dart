@@ -13,6 +13,7 @@ class _AuthPageState extends State<AuthPage> {
   String username = '';
   String password = '';
   bool isLoading = false;
+  GlobalKey<FormState> myform = GlobalKey();
 
   goToHome() {
     Navigator.pushReplacementNamed(context, 'home');
@@ -43,7 +44,6 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(color: Color.fromARGB(255, 181, 180, 180));
-    GlobalKey<FormState> myform = GlobalKey();
     return Scaffold(
       body: SafeArea(
         child: Center(
