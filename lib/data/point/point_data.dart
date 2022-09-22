@@ -7,13 +7,21 @@ class PointData {
   Future<Map<String, dynamic>> addPoint(
       {required String name,
       required String owner,
-      required dynamic lat,
-      required dynamic lng}) async {
+      required double? lat,
+      required double? lng}) async {
     bool status = false;
     String title = '';
     String message = '';
     try {
-      await _points.add({'name': name, 'owner': owner, 'lat': lat, 'lng': lng});
+      String uidPoint = DateTime.now().microsecondsSinceEpoch.toString();
+
+      await _points.doc(uidPoint).set({
+        'name': name,
+        'owner': owner,
+        'lat': lat,
+        'lng': lng,
+        'uid': uidPoint
+      });
       status = true;
       title = 'Pdv Agregado';
       message = 'Se ha agregado con exito el Pdv: $name';

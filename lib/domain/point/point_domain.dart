@@ -7,12 +7,11 @@ class PointDomain {
   Future<DomainResponse> storePoint(
       {required String name,
       required String owner,
-      required dynamic lat,
-      required dynamic lng}) async {
+      required double? lat,
+      required double? lng}) async {
     bool status = false;
     String title = '';
     String message = '';
-
     final response =
         await _pointData.addPoint(lat: lat, lng: lng, name: name, owner: owner);
     status = response['status'] ?? false;

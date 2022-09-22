@@ -16,15 +16,17 @@ class CreatePointScreen extends StatefulWidget {
 class _CreatePointScreenState extends State<CreatePointScreen> {
   String namePoint = '';
   String nameOwner = '';
-  double lat = 0;
-  double lng = 0;
+  double? lat;
+  double? lng;
   bool putMyUbication = true;
   bool gettinMyUbication = false;
   Set<Marker> markers = {};
+  GlobalKey<FormState> myForm = GlobalKey();
 
   final Completer<GoogleMapController> _controller = Completer();
   late CameraPosition _kLake;
   final _deviceGps = GpsDevice();
+  bool isSaving = false;
 
   getMyUbication() async {
     setState(() {
@@ -41,12 +43,12 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
           Marker(
               markerId: MarkerId(
                   'circle_id_${DateTime.now().millisecondsSinceEpoch}'),
-              position: LatLng(lat, lng),
+              position: LatLng(lat ?? 0, lng ?? 0),
               infoWindow: const InfoWindow(title: 'Mi Ubicación')),
         };
         _kLake = CameraPosition(
             bearing: 192.8334901395799,
-            target: LatLng(lat, lng),
+            target: LatLng(lat ?? 0, lng ?? 0),
             tilt: 59.440717697143555,
             zoom: 18);
       });
@@ -63,13 +65,44 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
     }
   }
 
+  gotoBack() {
+    Navigator.pop(context);
+  }
+
+  savePoint() async {
+    setState(() {
+      isSaving = true;
+    });
+    PointDomain pointDomain = PointDomain();
+    try {
+      final response = await pointDomain.storePoint(
+          name: namePoint, owner: nameOwner, lat: lat, lng: lng);
+      setState(() {
+        isSaving = false;
+      });
+      if (response.status) {
+        gotoBack();
+      }
+      Utils.showScaffoldNotification(
+          context: context,
+          title: response.title,
+          message: response.message,
+          type: response.status ? 'success' : 'error');
+    } catch (e) {
+      setState(() {
+        isSaving = false;
+      });
+      Utils.showScaffoldNotification(
+          context: context,
+          message: 'No se pudo guadar el punto de venta.',
+          title: 'Oopsss',
+          type: 'error');
+    }
+  }
+
   @override
   void initState() {
-    _kLake = const CameraPosition(
-        bearing: 192.8334901395799,
-        target: LatLng(-2.1810801, -79.900887),
-        tilt: 59.440717697143555,
-        zoom: 18);
+    getMyUbication();
     super.initState();
   }
 
@@ -81,78 +114,137 @@ class _CreatePointScreenState extends State<CreatePointScreen> {
       ),
       body: SafeArea(
         child: Form(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
-            child: Column(
-              children: [
-                Expanded(
-                    child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Nombre'),
-                      ),
-                      TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: 'Propietario'),
-                      ),
-                      Row(
-                        children: const [
-                          Expanded(child: Divider()),
-                          Icon(Icons.touch_app),
-                          Text('Ubicación'),
-                          Expanded(child: Divider()),
-                        ],
-                      ),
-                      SwitchListTile(
-                          value: putMyUbication,
-                          title: const Text(
-                              'Establecer mi ubicación al Punto de Venta'),
-                          onChanged: (onChanged) {
-                            setState(() {
-                              putMyUbication = onChanged;
-                              gettinMyUbication = true;
-                            });
-                          }),
-                      putMyUbication
-                          ? SizedBox(
-                              width: double.infinity,
-                              height: Utils.getSize(context).height * 0.4,
-                              child: gettinMyUbication
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : GoogleMap(
-                                      initialCameraPosition: _kLake,
-                                      onMapCreated:
-                                          (GoogleMapController controller) {
-                                        _controller.complete(controller);
-                                      },
-                                    ),
-                            )
-                          : Container(),
+          key: myForm,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: const InputDecoration(labelText: 'Nombre'),
+                    validator: _validate,
+                    onChanged: (value) {
+                      namePoint = value;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: _validate,
+                    decoration: const InputDecoration(labelText: 'Propietario'),
+                    onChanged: (value) {
+                      nameOwner = value;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Row(
+                    children: const [
+                      Expanded(child: Divider()),
+                      Icon(Icons.touch_app),
+                      Text('Ubicación'),
+                      Expanded(child: Divider()),
                     ],
                   ),
-                )),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      PointDomain pointDomain = PointDomain();
-                      pointDomain.storePoint(
-                          name: 'mi primer',
-                          owner: 'danielñ',
-                          lat: -0.2,
-                          lng: -79);
-                    },
-                    child: const Text('Guardar'),
+                  SwitchListTile(
+                      value: putMyUbication,
+                      title: const Text(
+                          'Establecer mi ubicación al Punto de Venta'),
+                      onChanged: (onChanged) {
+                        if (!onChanged) {
+                          lat = null;
+                          lng = null;
+                        }
+                        setState(() {
+                          putMyUbication = onChanged;
+                        });
+                        getMyUbication();
+                      }),
+                  putMyUbication
+                      ? SizedBox(
+                          width: double.infinity,
+                          height: Utils.getSize(context).height * 0.3,
+                          child: gettinMyUbication
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Stack(
+                                  children: [
+                                    GoogleMap(
+                                      initialCameraPosition: _kLake,
+                                      markers: markers,
+                                      onMapCreated: _controller.isCompleted
+                                          ? null
+                                          : (GoogleMapController controller) {
+                                              _controller.complete(controller);
+                                            },
+                                    ),
+                                    Positioned(
+                                        bottom: 5,
+                                        left: 5,
+                                        child: IconButton(
+                                          icon: Container(
+                                              width: 125,
+                                              height: 125,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.blue,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50)),
+                                              child: const Icon(
+                                                Icons.location_on,
+                                                color: Colors.white,
+                                              )),
+                                          onPressed: () {
+                                            getMyUbication();
+                                          },
+                                        ))
+                                  ],
+                                ),
+                        )
+                      : Container(),
+                  const SizedBox(
+                    height: 25,
                   ),
-                )
-              ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isSaving
+                          ? null
+                          : () {
+                              if (myForm.currentState?.validate() ?? false) {
+                                savePoint();
+                              } else {
+                                Utils.showScaffoldNotification(
+                                    context: context,
+                                    title: 'Atención',
+                                    type: 'error',
+                                    message: 'Ingrese los campos requeridos');
+                              }
+                            },
+                      child: isSaving
+                          ? const CircularProgressIndicator()
+                          : const Text('Guardar'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  String? _validate(value) {
+    if (value != null && value.trim().isNotEmpty) {
+      return null;
+    }
+    return 'Campo requerido*';
   }
 }
