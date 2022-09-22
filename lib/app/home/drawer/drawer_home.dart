@@ -1,4 +1,5 @@
 import 'package:app_pizzeria/app/utils.dart';
+import 'package:app_pizzeria/domain/auth/session.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -52,7 +53,7 @@ class DrawerHome extends StatelessWidget {
         ),
       ),
       extendedTheme: SidebarXTheme(
-        width: Utils.getSize(context).width * 0.5,
+        width: Utils.getSize(context).width * 0.7,
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 22, 16, 127),
         ),
@@ -70,7 +71,14 @@ class DrawerHome extends StatelessWidget {
       items: [
         SidebarXItem(icon: Icons.home, label: 'Mis Productos', onTap: _onClose),
         SidebarXItem(
-            icon: Icons.business, label: 'Puntos de Venta', onTap: _onClose)
+            icon: Icons.business, label: 'Puntos de Venta', onTap: _onClose),
+        SidebarXItem(
+            icon: Icons.account_box_rounded,
+            label: 'Cerrar Sesión',
+            onTap: () {
+              LoginDomain loginDomain = LoginDomain();
+              loginDomain.closeSession();
+            })
       ],
     );
   }

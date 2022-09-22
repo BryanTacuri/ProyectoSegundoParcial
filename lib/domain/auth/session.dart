@@ -25,4 +25,9 @@ class LoginDomain {
     return DomainResponse(
         status: status, message: message, title: title, data: user);
   }
+
+  Future<void> closeSession() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    return auth.signOut();
+  }
 }

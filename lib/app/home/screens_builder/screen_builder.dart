@@ -40,6 +40,8 @@ String _getTitleByIndex(int index) {
       return 'My Products';
     case 1:
       return 'My Poitns';
+    case 2:
+      return 'Mi Cuenta';
     default:
       return 'Not found page';
   }
