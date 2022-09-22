@@ -30,6 +30,30 @@ class PointDomain {
     return DomainResponse(status: status, message: message, title: title);
   }
 
+  Future<DomainResponse> deletePoint(
+      {required String uid, required String uidImage}) async {
+    bool status = false;
+    String title = '';
+    String message = '';
+
+    try {
+      final response = await _pointData.deletePoint(
+        uid: uid,
+        uidImage: uidImage,
+      );
+      status = response['status'] ?? false;
+      title = response['title'] ?? 'Error';
+      message =
+          response['message'] ?? 'No se logró obtener información del error';
+    } catch (e) {
+      status = false;
+      title = 'Oops..';
+      message = 'Ha ocurrido un error interno';
+    }
+
+    return DomainResponse(status: status, title: title, message: message);
+  }
+
   Future<DomainResponse> storePoint(
       {required String name,
       required String owner,

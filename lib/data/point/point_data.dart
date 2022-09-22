@@ -50,6 +50,26 @@ class PointData {
     return {'status': status, 'title': title, 'message': message};
   }
 
+  Future<Map<String, dynamic>> deletePoint(
+      {required String uidImage, required String uid}) async {
+    bool status = false;
+    String title = '';
+    String message = '';
+    try {
+      await _storageRef.child(uidImage).delete();
+      await _points.doc(uid).delete();
+
+      status = true;
+      title = 'Hecho';
+      message = 'Producto eliminado correctamente';
+    } catch (e) {
+      status = false;
+      title = 'Error';
+      message = 'No se logró eliminar el producto.';
+    }
+    return {'status': status, 'title': title, 'message': message};
+  }
+
   Future<Map<String, dynamic>> addPoint(
       {required String name,
       required String owner,
