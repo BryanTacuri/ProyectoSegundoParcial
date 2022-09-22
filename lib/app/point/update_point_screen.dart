@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_pizzeria/app/point/arguments/points_arguments.dart';

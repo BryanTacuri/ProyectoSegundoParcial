@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:app_pizzeria/app/point/arguments/points_arguments.dart';
-import 'package:app_pizzeria/app/utils.dart';
 import 'package:app_pizzeria/app/widgets/background_dissmisable.dart';
-import 'package:app_pizzeria/app/widgets/emptyMessage.dart';
+import 'package:app_pizzeria/app/widgets/empty_message.dart';
 import 'package:app_pizzeria/domain/point/point_domain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +60,7 @@ class _PointPageState extends State<PointPage> {
                                         onPressed: () {
                                           PointDomain pointDomain =
                                               PointDomain();
-                                          final value = pointDomain
+                                          pointDomain
                                               .deletePoint(
                                                   uid: data['uid'],
                                                   uidImage: data['uidImage'])

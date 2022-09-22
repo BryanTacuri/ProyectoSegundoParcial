@@ -20,9 +20,9 @@ class ScreensBuilder extends StatelessWidget {
         final pageTitle = _getTitleByIndex(controller.selectedIndex);
         switch (controller.selectedIndex) {
           case 0:
-            return ShowProductsScreen();
+            return const ShowProductsScreen();
           case 1:
-            return PointPage();
+            return const PointPage();
           default:
             return Text(
               pageTitle,

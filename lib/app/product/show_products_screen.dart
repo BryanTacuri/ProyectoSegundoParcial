@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:app_pizzeria/app/product/arguments/product_argument.dart';
 import 'package:app_pizzeria/app/widgets/background_dissmisable.dart';
-import 'package:app_pizzeria/app/widgets/emptyMessage.dart';
+import 'package:app_pizzeria/app/widgets/empty_message.dart';
 import 'package:app_pizzeria/domain/product/product_domain.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                                         onPressed: () {
                                           ProductDomain productDomain =
                                               ProductDomain();
-                                          final value = productDomain
+                                          productDomain
                                               .deleteProduct(
                                                   uid: data['uid'],
                                                   uidImage: data['uidImage'])
