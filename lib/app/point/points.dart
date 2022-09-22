@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_pizzeria/app/point/arguments/points_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -42,8 +43,17 @@ class _PointPageState extends State<PointPage> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(data['name']),
-                    subtitle: Text(data['owner']),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'update_point',
+                          arguments: PointsArgument(
+                              name: data['name'] ?? 'Joyas',
+                              uid: data['uid'] ?? '',
+                              owner: data['owner'] ?? 'Bryan Tacuri',
+                              lat: data['lat'] ?? 0,
+                              lng: data['lng'] ?? 0));
+                    },
+                    title: Text(data['name'] ?? 'Joyas'),
+                    subtitle: Text(data['owner'] ?? 'Bryan Tacuri'),
                   ),
                   const Divider()
                 ],

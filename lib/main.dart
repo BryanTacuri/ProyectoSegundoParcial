@@ -2,6 +2,7 @@ import 'package:app_pizzeria/app/auth/auth_page.dart';
 import 'package:app_pizzeria/app/auth/check_out_page.dart';
 import 'package:app_pizzeria/app/home/home_page.dart';
 import 'package:app_pizzeria/app/point/create_point_screen.dart';
+import 'package:app_pizzeria/app/point/update_point_screen.dart';
 import 'package:app_pizzeria/app/product/create_product_screen.dart';
 import 'package:app_pizzeria/app/product/update_product_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,8 +40,9 @@ class _MyAppState extends State<MyApp> {
         'login': ((context) => const AuthPage()), //
         'home': ((context) => const HomePage()),
         'create_point': ((context) => const CreatePointScreen()),
-        'create_product': ((context) => const CreateProductScreen()),
         'update_product': ((context) => const UpdateProductScreen()),
+        'create_product': ((context) => const CreateProductScreen()),
+        'update_point': ((context) => const UpdatePointScreen()),
       },
     );
   }
