@@ -95,7 +95,7 @@ class ProductData {
         'descriptionProduct': descriptionProduct,
         'priceProduct': priceProduct,
         'uid': reference,
-        'uid_Image': uidImage
+        'uid_image': uidImage
       });
       // _products.add({});
       status = true;
