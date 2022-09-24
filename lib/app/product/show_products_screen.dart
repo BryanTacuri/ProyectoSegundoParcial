@@ -70,7 +70,7 @@ class _ShowProductsScreenState extends State<ShowProductsScreen> {
                                           productDomain
                                               .deleteProduct(
                                                   uid: data['uid'],
-                                                  uidImage: data['uidImage'])
+                                                  uidImage: data['uid_Image'])
                                               .then((value) => value.status);
                                           return Navigator.of(context)
                                               .pop(true);
